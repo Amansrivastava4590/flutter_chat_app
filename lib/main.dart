@@ -12,16 +12,48 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
-  // This widget is the root of your application.
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
+  Brightness? _brightness;
+
+ @override
+  void initState() {
+   WidgetsBinding.instance.addObserver(this);
+   _brightness = WidgetsBinding.instance.window.platformBrightness;
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+   if(mounted) {
+     setState(() {
+       _brightness = WidgetsBinding.instance.window.platformBrightness;
+     });
+
+   }
+    super.didChangePlatformBrightness();
+  }
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: CupertinoThemeData(
-        brightness: Brightness.light,
+        brightness: _brightness == Brightness.light ? Brightness.light:Brightness.dark,
         primaryColor: AppColors.primary
       ),
 
@@ -66,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           tabBuilder: (BuildContext context,int i ){
             return Center(
                 child: Container(
-                  child: screens[3]));
+                  child: screens[2]));
           },
       tabBar: CupertinoTabBar(items: [
         BottomNavigationBarItem(

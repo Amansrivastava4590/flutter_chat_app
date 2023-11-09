@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluuter_chat_app/Screens/messages.dart';
 import 'package:fluuter_chat_app/components/list_tile_chat.dart';
 import 'package:fluuter_chat_app/components/search_bar.dart';
 import 'package:fluuter_chat_app/global.dart';
@@ -31,13 +32,15 @@ class ChatPage extends StatelessWidget {
                         snapshot.data!.map((e) => ListTileChat(
                           key: UniqueKey(),
                           count: e.count,
-                          onTap: () => {},
+                          onTap: () =>  navigate(context,MessageBoxScreen(contact: e.name,)),
                           subtitle: e.msg,
                           title: e.name,
                           date: e.date,
                           image: e.avatar,
                           border: e.story,
-                          onImageTap: () => {},
+                          onImageTap: () => {
+
+                          },
                         )).toList()))
                     :(snapshot.connectionState == ConnectionState.waiting)
                 ? SliverFillRemaining(

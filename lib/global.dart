@@ -92,3 +92,9 @@ class Whatsapp {
 
   }
 }
+
+void navigate(BuildContext context,Widget a){
+  Navigator.push(context, CupertinoPageRoute(builder: (context)=> a));
+}
+
+void pop(context) => Navigator.pop(context);

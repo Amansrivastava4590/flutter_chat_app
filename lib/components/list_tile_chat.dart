@@ -27,8 +27,8 @@ class ListTileChat extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(),
+    return CupertinoButton(
+      onPressed: () => onTap(),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Row(
