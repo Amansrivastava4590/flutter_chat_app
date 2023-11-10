@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluuter_chat_app/Screens/messages.dart';
+import 'package:fluuter_chat_app/Screens/story_preview.dart';
 import 'package:fluuter_chat_app/components/list_tile_chat.dart';
 import 'package:fluuter_chat_app/model/me_model.dart';
 import 'package:fluuter_chat_app/model/people_model.dart';
-
+import 'package:fluuter_chat_app/model/story_model.dart';
+import 'package:fluuter_chat_app/model/user_model.dart';
+import 'package:collection/collection.dart';
 import '../components/search_bar.dart';
 import '../global.dart';
 
@@ -159,7 +162,18 @@ class MyStatus extends StatelessWidget {
 
 class Stories extends StatelessWidget {
   final AsyncSnapshot<List<PeopleModel>> snapshot;
-  const Stories({Key? key, required this.snapshot,}) : super(key: key);
+  List<UserModel> sampleUsers=[];
+   Stories({Key? key, required this.snapshot,}) {
+
+     sampleUsers = snapshot.data?.where((people) => people.story!).map((people) {
+       List<StoryModel> stories =  people.stories!.map((e) => StoryModel(e)).toList();
+
+       return UserModel(people.firstName!,people.avatar!,stories);
+     }).toList() ?? [];
+
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,13 +194,13 @@ class Stories extends StatelessWidget {
               child: snapshot.hasData
                   ? ListView(
                 scrollDirection: Axis.horizontal,
-                children: snapshot.data!.where((PeopleModel people) => (people.story!)).map((PeopleModel e) {
+                children: snapshot.data!.where((PeopleModel people) => (people.story!)).mapIndexed((int index,PeopleModel e) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
                         GestureDetector(
-                           onTap: () => {},
+                           onTap: () =>navigate(context, StoryPreview(users: sampleUsers,pageIndex: index,)),
                           child: CircleAvatar(
                             radius: 40,
                             backgroundColor: AppColors.primary,

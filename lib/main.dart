@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           tabBuilder: (BuildContext context,int i ){
             return Center(
                 child: Container(
-                  child: screens[2]));
+                  child: screens[i]));
           },
       tabBar: CupertinoTabBar(items: [
         BottomNavigationBarItem(

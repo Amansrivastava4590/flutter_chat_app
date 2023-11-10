@@ -6,7 +6,7 @@ class ChatModel {
   String date;
   String count;
   bool story;
-  List<dynamic> stories;
+  List<String> stories;
   bool opened;
   String type;
 
@@ -20,7 +20,8 @@ class ChatModel {
       required this.story,
       required this.stories,
       required this.opened,
-      required this.type});
+      required this.type,
+      });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
       id: json['id'],
@@ -30,7 +31,7 @@ class ChatModel {
       date: json['date'],
       count: json['count'],
       story: json['story'],
-      stories: json['stories'],
+      stories: List.from(json['stories']),
       opened: json['opened'],
       type: json['type']);
 

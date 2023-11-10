@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluuter_chat_app/Screens/messages.dart';
+import 'package:fluuter_chat_app/Screens/story_preview.dart';
 import 'package:fluuter_chat_app/components/list_tile_chat.dart';
 import 'package:fluuter_chat_app/components/search_bar.dart';
 import 'package:fluuter_chat_app/global.dart';
 import 'package:fluuter_chat_app/model/chat_model.dart';
+import 'package:fluuter_chat_app/model/story_model.dart';
+import 'package:fluuter_chat_app/model/user_model.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -38,7 +41,16 @@ class ChatPage extends StatelessWidget {
                           date: e.date,
                           image: e.avatar,
                           border: e.story,
-                          onImageTap: () => {
+                          onImageTap: ()  {
+                            if(!e.story) return;
+                            List<UserModel> sampleUsers=[];
+                            List<StoryModel> stories =[];
+
+                            stories = e.stories.map((img) => StoryModel(img)).toList();
+
+                            sampleUsers.add(new UserModel(e.name, e.avatar, stories));
+
+                            navigate(context, StoryPreview(users: sampleUsers,pageIndex: 0 ,));
 
                           },
                         )).toList()))
