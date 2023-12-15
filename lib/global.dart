@@ -21,7 +21,6 @@ class Whatsapp {
   static Future<meModel> Me()async{
     final res = await http.get(Uri.parse("$whatsappUrl-users/me"));
     if(res.statusCode == 200){
-      print(res.body);
       return meModel.fromJson(json.decode(res.body));
     }
     throw Exception(res.reasonPhrase);
@@ -32,7 +31,6 @@ class Whatsapp {
     //Response response = await get(Uri.parse("$whatsappUrl/chats"));
     if(res.statusCode == 200){
       final parsed = jsonDecode(res.body);
-      print(parsed);
       return parsed.map<ChatModel>((json) => ChatModel.fromJson(json)).toList();
     }
     throw Exception(res.reasonPhrase);
@@ -43,6 +41,7 @@ class Whatsapp {
     //Response response = await get(Uri.parse("$whatsappUrl/chats"));
     if(res.statusCode == 200){
       final parsed = jsonDecode(res.body);
+      print(parsed);
       return parsed.map<CallModel>((json) => CallModel.fromJson(json)).toList();
     }
     throw Exception(res.reasonPhrase);
