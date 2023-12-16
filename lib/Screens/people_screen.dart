@@ -107,9 +107,9 @@ class MyStatus extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            me.firstName != null ?
+                            me.username != null ?
                             Text(
-                              me.firstName,
+                              me.username,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 17, fontWeight: FontWeight.bold),

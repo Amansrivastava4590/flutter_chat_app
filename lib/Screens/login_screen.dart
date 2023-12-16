@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluuter_chat_app/Screens/register_page.dart';
 import 'package:fluuter_chat_app/global.dart';
 
 class Login extends StatefulWidget {
@@ -115,7 +116,14 @@ class _LoginState extends State<Login> {
                   CupertinoButton(padding: EdgeInsets.zero,
                     child: Text(" Register here",style: TextStyle(
                       decoration: TextDecoration.underline,
-                        color: Colors.blueAccent),),onPressed: (){},),
+                        color: Colors.blueAccent),),onPressed: (){
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => RegisterPage(),
+                        ),
+                      );
+                    },),
                 ],
               ),
 

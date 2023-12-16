@@ -3,10 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluuter_chat_app/Screens/call_screen.dart';
 import 'package:fluuter_chat_app/Screens/chats_screen.dart';
+import 'package:fluuter_chat_app/Screens/login_screen.dart';
 import 'package:fluuter_chat_app/Screens/people_screen.dart';
 import 'package:fluuter_chat_app/Screens/settting_screen.dart';
 import 'package:fluuter_chat_app/global.dart';
 import 'package:logger/logger.dart';
+
+import 'Screens/register_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,7 +60,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
         primaryColor: AppColors.primary
       ),
 
-      home: const MyHomePage(),
+      home:  RegisterPage(),
     );
   }
 }

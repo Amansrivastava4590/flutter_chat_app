@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:fluuter_chat_app/main.dart';
 import 'package:fluuter_chat_app/model/call_model.dart';
 import 'package:fluuter_chat_app/model/chat_model.dart';
 import 'package:fluuter_chat_app/model/people_model.dart';
@@ -23,6 +24,31 @@ class Whatsapp {
     final res = await http.get(Uri.parse("$whatsappUrl-users/me/$userId"));
     if(res.statusCode == 200){
       return meModel.fromJson(json.decode(res.body));
+    }
+    throw Exception(res.reasonPhrase);
+
+  }
+  static Future Register(BuildContext context,String username,String email,String status)async{
+    Map body = {
+      "username":username,
+      "email":email,
+      "status":status
+    };
+    http.Response res  = await http.post(
+        Uri.parse("$whatsappUrl-users/me"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: json.encode(body));
+    print(res.statusCode);
+    if(res.statusCode == 201){
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => MyHomePage(),
+        ),
+      );
+     print("Successfull");
     }
     throw Exception(res.reasonPhrase);
 
