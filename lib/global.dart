@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluuter_chat_app/main.dart';
 import 'package:fluuter_chat_app/model/call_model.dart';
 import 'package:fluuter_chat_app/model/chat_model.dart';
@@ -19,10 +20,10 @@ class AppColors {
 class Whatsapp {
   static const whatsappUrl = "$url/whatsapp";
 
-  static Future<meModel> Me()async{
-    String userId= "657da53414cb54fb4258407d";
+  static Future<meModel> Me(String userId)async{
     final res = await http.get(Uri.parse("$whatsappUrl-users/me/$userId"));
     if(res.statusCode == 200){
+      print("parsed Me:${json.decode(res.body)}");
       return meModel.fromJson(json.decode(res.body));
     }
     throw Exception(res.reasonPhrase);
@@ -32,7 +33,9 @@ class Whatsapp {
     Map body = {
       "username":username,
       "email":email,
-      "status":status
+      "status":status,
+      "story":false,
+      "avatar": null
     };
     http.Response res  = await http.post(
         Uri.parse("$whatsappUrl-users/me"),
@@ -42,10 +45,14 @@ class Whatsapp {
         body: json.encode(body));
     print(res.statusCode);
     if(res.statusCode == 201){
+      final parsed = jsonDecode(res.body);
+      print("parsed122:${parsed['data']['_id']}");
+      final _storage = const FlutterSecureStorage();
+      _storage.write(key: "userId", value: parsed['data']['_id']);
       Navigator.push(
         context,
         CupertinoPageRoute(
-          builder: (context) => MyHomePage(),
+          builder: (context) => MyHomePage(userId: parsed['data']['_id'],),
         ),
       );
      print("Successfull");
@@ -68,7 +75,7 @@ class Whatsapp {
     //Response response = await get(Uri.parse("$whatsappUrl/chats"));
     if(res.statusCode == 200){
       final parsed = jsonDecode(res.body);
-      print(parsed);
+      print("parsed call:${json.decode(res.body)}");
       return parsed.map<CallModel>((json) => CallModel.fromJson(json)).toList();
     }
     throw Exception(res.reasonPhrase);
@@ -83,7 +90,7 @@ class Whatsapp {
       );
       if (res.statusCode == 200) {
         final parsed = jsonDecode(res.body);
-        print(parsed);
+        print("parsed people:${json.decode(res.body)}");
         return parsed.map<PeopleModel>((json) => PeopleModel.fromJson(json))
             .toList();
       }
@@ -106,7 +113,7 @@ class Whatsapp {
       );
       if (res.statusCode == 200) {
         final parsed = jsonDecode(res.body);
-        print(parsed);
+        print("parsed message:${json.decode(res.body)}");
         return parsed.map<MessageModel>((json) => MessageModel.fromJson(json))
             .toList();
       }

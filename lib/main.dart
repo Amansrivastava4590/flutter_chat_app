@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluuter_chat_app/Screens/call_screen.dart';
 import 'package:fluuter_chat_app/Screens/chats_screen.dart';
 import 'package:fluuter_chat_app/Screens/login_screen.dart';
@@ -24,6 +25,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
   Brightness? _brightness;
+  late String userId;
+  bool _isSignedIn = false;
+  final _storage = const FlutterSecureStorage();
 
  @override
   void initState() {
@@ -31,6 +35,17 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
    _brightness = WidgetsBinding.instance.window.platformBrightness;
     // TODO: implement initState
     super.initState();
+  }
+  @override
+  void didChangeDependencies() async{
+   _storage.write(key: 'userId', value: "657df64fbe1dfc2521aec38a");
+    userId = (await _storage.read(key: "userId"))!;
+
+    if(userId.isNotEmpty){
+    _isSignedIn = true;
+    }
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -60,13 +75,14 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
         primaryColor: AppColors.primary
       ),
 
-      home:  RegisterPage(),
+      home: _isSignedIn ? MyHomePage(userId: userId) : RegisterPage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
- const MyHomePage({Key? key}) : super(key: key);
+  String userId;
+  MyHomePage({Key? key,required this.userId}) : super(key: key);
 
 
   @override
@@ -74,6 +90,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _storage = const FlutterSecureStorage();
 
   @override
   void initState() {
@@ -87,9 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void meMethod() async{
-    var me = await Whatsapp.Me();
+    var me = await Whatsapp.Me(widget.userId);
     logPrint("log instead of print:$me");
   }
+
 
   var screens = [ChatPage(), CallScreen(),PeopleScreen(),SettingPage()];
 

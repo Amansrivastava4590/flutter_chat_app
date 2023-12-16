@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluuter_chat_app/Screens/messages.dart';
 import 'package:fluuter_chat_app/Screens/story_preview.dart';
 import 'package:fluuter_chat_app/components/list_tile_chat.dart';
@@ -11,9 +12,23 @@ import 'package:collection/collection.dart';
 import '../components/search_bar.dart';
 import '../global.dart';
 
-class PeopleScreen extends StatelessWidget {
-  const PeopleScreen({Key? key}) : super(key: key);
+class PeopleScreen extends StatefulWidget {
+   PeopleScreen({Key? key}) : super(key: key);
 
+  @override
+  State<PeopleScreen> createState() => _PeopleScreenState();
+}
+
+class _PeopleScreenState extends State<PeopleScreen> {
+  final _storage = const FlutterSecureStorage();
+  String userId="";
+  @override
+  void didChangeDependencies() async{
+    userId = (await _storage.read(key: "userId"))!;
+    print("userId:$userId");
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return  FutureBuilder<List<PeopleModel>>(
@@ -31,7 +46,7 @@ class PeopleScreen extends StatelessWidget {
                   onChanged: () {},
                   onSubmitted: () {},
                 ),
-                const MyStatus(),
+                 MyStatus(userId: userId,),
                  Stories(snapshot: snapshot,),
                  PeopleList(snapshot: snapshot),
               ],
@@ -70,13 +85,15 @@ final AsyncSnapshot<List<PeopleModel>> snapshot;
   }}
 
 class MyStatus extends StatelessWidget {
-  const MyStatus({Key? key,}) : super(key: key);
+  String userId;
+   MyStatus({Key? key,required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print("userid in myStatus:$userId");
     return SliverToBoxAdapter(
       child: FutureBuilder<meModel>(
-          future: Whatsapp.Me(),
+          future: Whatsapp.Me(userId),
           builder: (context, snapshot) {
             print("snapshot.data:${snapshot.data}");
             if(snapshot.hasData){
