@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'model/me_model.dart';
 import 'model/message_model.dart';
 
-const url = "http://192.168.1.96:3000";
+const url = "http://localhost:3000";
 
 class AppColors {
   static Color? primary = const Color(0xFFC10000);
@@ -19,7 +19,8 @@ class Whatsapp {
   static const whatsappUrl = "$url/whatsapp";
 
   static Future<meModel> Me()async{
-    final res = await http.get(Uri.parse("$whatsappUrl-users/me"));
+    String userId= "657da53414cb54fb4258407d";
+    final res = await http.get(Uri.parse("$whatsappUrl-users/me/$userId"));
     if(res.statusCode == 200){
       return meModel.fromJson(json.decode(res.body));
     }
@@ -49,7 +50,7 @@ class Whatsapp {
   }
   static Future<List<PeopleModel>> People()async{
     try {
-      final res = await http.get(Uri.parse("$whatsappUrl-messages/people"),
+      final res = await http.get(Uri.parse("$whatsappUrl-people/people"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
           }
@@ -72,7 +73,7 @@ class Whatsapp {
 
   static Future<List<MessageModel>> Message()async{
     try {
-      final res = await http.get(Uri.parse("$whatsappUrl/message"),
+      final res = await http.get(Uri.parse("$whatsappUrl-messages/message"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
           }
